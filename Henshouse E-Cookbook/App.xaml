@@ -1,0 +1,111 @@
+﻿<Application x:Class="Henshouse_E_Cookbook.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Henshouse_E_Cookbook"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <Brush x:Key="ListBackground">#F5F0F6</Brush>
+            <Brush x:Key="RecipeBackground">#FFE9F3</Brush>
+            <Brush x:Key="IngrediencesInstructionsBackground">#FECEE9</Brush>
+            <Brush x:Key="FontColour">#2E282A</Brush>
+            <Style x:Key="RecipeButton" TargetType="Button">
+                <Setter Property="Background" Value="#C4B7CB" />
+                <Setter Property="Foreground" Value="{StaticResource FontColour}" />
+                <Setter Property="BorderThickness" Value="0"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#C4B7CB"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="ButtomButton" TargetType="Button">
+                <Setter Property="Background" Value="#C98BB9" />
+                <Setter Property="Foreground" Value="{StaticResource FontColour}" />
+                <Setter Property="BorderThickness" Value="0"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#C98BB9"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="AddIngredienceButton" TargetType="Button">
+                <Setter Property="Background" Value="#C98BB9" />
+                <Setter Property="Foreground" Value="#32CD32" />
+                <Setter Property="Content" Value="+"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#C98BB9"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="RemoveIngredienceButton" TargetType="Button">
+                <Setter Property="Background" Value="#C98BB9" />
+                <Setter Property="Foreground" Value="#8B0000" />
+                <Setter Property="Content" Value="-"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#C98BB9"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="SearchTextbox" TargetType="TextBox">
+                <Setter Property="Background" Value="#EE92C2"/>
+                <Setter Property="Foreground" Value="{StaticResource FontColour}" />
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
+            <Style x:Key="RecipeNameTextbox" TargetType="TextBox">
+                <Setter Property="Background" Value="#EE92C2" />
+                <Setter Property="Foreground" Value="{StaticResource FontColour}" />
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
+            <Style x:Key="IngredienceNameTextbox" TargetType="TextBox">
+                <Setter Property="Background" Value="#EE92C2" />
+                <Setter Property="Foreground" Value="{StaticResource FontColour}" />
+                <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
+            <Style x:Key="IngredienceAmountTextbox" TargetType="TextBox">
+                <Setter Property="Background" Value="#EE92C2" />
+                <Setter Property="Foreground" Value="{StaticResource FontColour}" />
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
+            <Style x:Key="InstructionsTextbox" TargetType="TextBox">
+                <Setter Property="Background" Value="#EE92C2" />
+                <Setter Property="Foreground" Value="{StaticResource FontColour}" />
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <Setter Property="VerticalContentAlignment" Value="Top"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
+            <Style x:Key="RecipeNameLabel" TargetType="Label">
+                <Setter Property="Background" Value="{StaticResource RecipeBackground}" />
+                <Setter Property="Foreground" Value="{StaticResource FontColour}" />
+            </Style>
+            <Style x:Key="IngredienceNameLabel" TargetType="Label">
+                <Setter Property="Background" Value="{StaticResource RecipeBackground}" />
+                <Setter Property="Foreground" Value="{StaticResource FontColour}" />
+                <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            </Style>
+            <Style x:Key="IngredienceAmountLabel" TargetType="Label">
+                <Setter Property="Background" Value="{StaticResource RecipeBackground}" />
+                <Setter Property="Foreground" Value="{StaticResource FontColour}" />
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            </Style>
+            <Style x:Key="InstructionsLabel" TargetType="Label">
+                <Setter Property="Background" Value="{StaticResource RecipeBackground}" />
+                <Setter Property="Foreground" Value="{StaticResource FontColour}" />
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <Setter Property="VerticalContentAlignment" Value="Top"/>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

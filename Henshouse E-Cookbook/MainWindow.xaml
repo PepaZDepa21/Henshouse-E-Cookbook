@@ -1,0 +1,163 @@
+﻿<Window x:Class="Henshouse_E_Cookbook.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Henshouse_E_Cookbook"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Name="ListGrid" Grid.Column="0" Background="{StaticResource ListBackground}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="1" Grid.Column="1" FontWeight="Bold" Content="Recipes" HorizontalContentAlignment="Center" Foreground="{StaticResource FontColour}" FontSize="12"/>
+            <ListView x:Name="lvRecipes" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" HorizontalContentAlignment="Stretch" d:ItemsSource="{d:SampleData ItemCount=30}" ItemsSource="{Binding AllRecipes}" Background="{StaticResource ListBackground}" BorderThickness="0">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid HorizontalAlignment="Stretch" Height="25">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" Foreground="{StaticResource FontColour}"/>
+                            <Button Name="btnRead" Grid.Column="1" Content="Read" Style="{StaticResource RecipeButton}"/>
+                            <Button Name="btnEdit" Grid.Column="3" Content="Edit" Style="{StaticResource RecipeButton}"/>
+                            <Button Name="btnDelete" Grid.Column="5" Content="Delete" Style="{StaticResource RecipeButton}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Grid Grid.Row="5" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Style="{StaticResource SearchTextbox}"/>
+                <Button Name="btnSearch" Grid.Column="2" Content="Search" Style="{StaticResource RecipeButton}"/>
+            </Grid>
+        </Grid>
+
+
+
+        <Grid Name="RecipeGrid" Grid.Column="1" Background="{StaticResource RecipeBackground}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="7*"/>
+                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="25"/>
+                </Grid.RowDefinitions>
+
+                <TextBox Name="tbRecipeName" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource RecipeNameTextbox}"/>
+                <Label Name="lbRecipeName" Content="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource RecipeNameLabel}"/>
+                <ListView x:Name="lvIngrediencesRead" Grid.Row="2" HorizontalContentAlignment="Stretch" d:ItemsSource="{d:SampleData ItemCount=30}" Background="{StaticResource RecipeBackground}" ItemsSource="{Binding Ingrediences, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" BorderThickness="0">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Stretch" Height="25">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="0.1*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Name="lbIngredienceName" Content="{Binding IName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource IngredienceNameLabel}"/>
+                                <Label Name="lbIngredienceAmount" Content="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4" Style="{StaticResource IngredienceAmountLabel}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <ListView x:Name="lvIngrediencesEdit" Grid.Row="2" HorizontalContentAlignment="Stretch" d:ItemsSource="{d:SampleData ItemCount=30}" Background="{StaticResource RecipeBackground}" ItemsSource="{Binding Ingrediences, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" BorderThickness="0">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Stretch" Height="25">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="0.1*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Name="tbIngredienceName" Text="{Binding IName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource IngredienceNameTextbox}"/>
+                                <Button Name="btRemoveIngredience"  Grid.Column="2" Style="{StaticResource RemoveIngredienceButton}" Click="BtnRemoveIngredienceClick"/>
+                                <TextBox Name="tbIngredienceAmount" Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4" Style="{StaticResource IngredienceAmountTextbox}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Grid Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="25"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Name="btnAddIngredience" Grid.Column="1" Style="{StaticResource AddIngredienceButton}" FontWeight="Bold" FontSize="17" Click="BtnAddIngredinceClick"/>
+                </Grid>
+            </Grid>
+            <TextBox Name="tbInstructions" Grid.Column="1" Grid.Row="3" Style="{StaticResource InstructionsTextbox}" Text="{Binding Instructions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Name="lbInstructions" Grid.Column="1" Grid.Row="3" Style="{StaticResource InstructionsLabel}" Content="{Binding Instructions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Name="lbStatus" Grid.Column="1" Grid.Row="4" Content="{Binding Ingrediences, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Style="{StaticResource InstructionsLabel}"/>
+            <Grid Grid.Column="1" Grid.Row="6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="New recipe" Style="{StaticResource ButtomButton}" Click="BtnNewRecipeClick"/>
+                <Button Grid.Column="2" Content="Import" Style="{StaticResource ButtomButton}" Click="BtnImportClick"/>
+                <Button Grid.Column="4" Content="Export" Style="{StaticResource ButtomButton}" Click="BtnExportClick"/>
+                <Button Grid.Column="6" Content="Random" Style="{StaticResource ButtomButton}" Click="BtnRandomClick"/>
+                <Button Grid.Column="8" Content="Undo" Style="{StaticResource ButtomButton}" Click="BtnUndoClick"/>
+                <Button Grid.Column="10" Content="Save" Style="{StaticResource ButtomButton}" Click="BtnSaveClick"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

@@ -41,9 +41,9 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Label Grid.Column="0" Content="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" Foreground="{StaticResource FontColour}"/>
-                            <Button Name="btnRead" Grid.Column="1" Content="Read" Style="{StaticResource RecipeButton}"/>
-                            <Button Name="btnEdit" Grid.Column="3" Content="Edit" Style="{StaticResource RecipeButton}"/>
-                            <Button Name="btnDelete" Grid.Column="5" Content="Delete" Style="{StaticResource RecipeButton}"/>
+                            <Button Name="btnRead" Grid.Column="1" Content="Read" Style="{StaticResource RecipeButton}" Click="BtnReadRecipeClick"/>
+                            <Button Name="btnEdit" Grid.Column="3" Content="Edit" Style="{StaticResource RecipeButton}" Click="BtnEditRecipeClick"/>
+                            <Button Name="btnDelete" Grid.Column="5" Content="Delete" Style="{StaticResource RecipeButton}" Click="BtnDeleteRecipeClick"/>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -73,7 +73,6 @@
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="10"/>
                 <RowDefinition Height="1*"/>
-                <RowDefinition Height="50"/>
                 <RowDefinition Height="10"/>
                 <RowDefinition Height="35"/>
                 <RowDefinition Height="20"/>
@@ -134,10 +133,9 @@
                     <Button Name="btnAddIngredience" Grid.Column="1" Style="{StaticResource AddIngredienceButton}" FontWeight="Bold" FontSize="17" Click="BtnAddIngredinceClick"/>
                 </Grid>
             </Grid>
-            <TextBox Name="tbInstructions" Grid.Column="1" Grid.Row="3" Style="{StaticResource InstructionsTextbox}" Text="{Binding Instructions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Name="lbInstructions" Grid.Column="1" Grid.Row="3" Style="{StaticResource InstructionsLabel}" Content="{Binding Instructions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Name="lbStatus" Grid.Column="1" Grid.Row="4" Content="{Binding Ingrediences, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Style="{StaticResource InstructionsLabel}"/>
-            <Grid Grid.Column="1" Grid.Row="6">
+            <TextBox Name="tbInstructions" TextWrapping="Wrap" AcceptsReturn="True" Grid.Column="1" Grid.Row="3" Style="{StaticResource InstructionsTextbox}" Text="{Binding Instructions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Name="lbInstructions"  Grid.Column="1" Grid.Row="3" Style="{StaticResource InstructionsLabel}" Content="{Binding Instructions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Grid Grid.Column="1" Grid.Row="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="0.2*"/>

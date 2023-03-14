@@ -85,8 +85,8 @@ namespace Henshouse_E_Cookbook
             }
 
             rec.ClearRecipe();
-            lvRecipes.ItemsSource = null;
-            lvRecipes.ItemsSource = Recipe.AllRecipes;
+            UpdateRecipeListview();
+            UpdateIngredienceListview();
         }
         private void BtnAddIngredinceClick(object sender, RoutedEventArgs e)
         {
@@ -140,11 +140,36 @@ namespace Henshouse_E_Cookbook
 
     class Recipe : INotifyPropertyChanged
     {
-        private string? name, instructions;
+        private string? name, instructions, ingrediencesStr;
         public Guid ID { get; set; }
-        public List<Ingredience> Ingrediences { get; set; } = new List<Ingredience>();
+        private List<Ingredience> ingrediences { get; set; }
+        public string IngrediencesStr
+        {
+            get
+            {
+                return ingrediencesStr;
+            }
+            set 
+            {
+                ingrediencesStr = value;
+            }
+        }
+        
         [JsonIgnore]
         public static List<Recipe> AllRecipes { get; set; } = new List<Recipe>();
+        [JsonIgnore]
+        public List<Ingredience> Ingrediences 
+        { 
+            get
+            {
+                return ingrediences;
+            }
+            set
+            {
+                ingrediences = value;
+                OnPropertyChanged("Ingrediences");
+            }
+        }
 
         public string Name
         {
@@ -156,6 +181,7 @@ namespace Henshouse_E_Cookbook
             {
                 name = value;
                 OnPropertyChanged("Name");
+                OnPropertyChanged("Ingrediences");
             }
         }
 
@@ -169,6 +195,7 @@ namespace Henshouse_E_Cookbook
             {
                 instructions = value;
                 OnPropertyChanged("Instructions");
+                OnPropertyChanged("Ingrediences");
             }
         }
 
@@ -177,21 +204,35 @@ namespace Henshouse_E_Cookbook
         public Recipe() 
         {
             ID = Guid.NewGuid();
+            Ingrediences = new List<Ingredience>();
         }
-        public Recipe(string? rName, string? instructs, Guid iD)
+        public Recipe(string? rName, string? instructs, Guid iD, List<Ingredience> ingrediences)
         {
             Name = rName;
             Instructions = instructs;
             ID = iD;
+            Ingrediences = ingrediences;
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in ingrediences)
+            {
+                sb.AppendLine(Ingredience.SerializeIngredience(item));
+            }
+            IngrediencesStr = sb.ToString();
         }
-        public static Recipe CopyRecipe(Recipe recipe) => new Recipe(recipe.Name, recipe.Instructions, recipe.ID);
+        public static Recipe CopyRecipe(Recipe recipe) 
+        { 
+            
+            return new Recipe(recipe.Name, recipe.Instructions, recipe.ID, recipe.Ingrediences); 
+        }
+        
 
         public void ClearRecipe()
         {
-            this.Name = null;
-            this.Instructions = null;
-            this.ID = Guid.NewGuid();
-            this.Ingrediences.Clear();
+            Name = null;
+            Instructions = null;
+            ID = Guid.NewGuid();
+            Ingrediences = new List<Ingredience>();
+            IngrediencesStr = null;
         }
 
         private void OnPropertyChanged(string property)
@@ -230,6 +271,14 @@ namespace Henshouse_E_Cookbook
             {
                 amount = value;
             }
+        }
+        public static string SerializeIngredience(Ingredience ingredience)
+        {
+            return JsonSerializer.Serialize(ingredience);
+        }
+        public static Ingredience DeserializeIngredience(string ingredience)
+        {
+            return JsonSerializer.Deserialize<Ingredience>(ingredience);
         }
         public Ingredience()
         {

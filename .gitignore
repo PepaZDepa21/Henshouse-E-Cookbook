@@ -361,5 +361,3 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-
-.\Henshouse E-Cookbook\bin\Debug\net6.0-windows\Recipes.txt

@@ -28,7 +28,7 @@
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="1" Grid.Column="1" FontWeight="Bold" Content="Recipes" HorizontalContentAlignment="Center" Foreground="{StaticResource FontColour}" FontSize="12"/>
-            <ListView x:Name="lvRecipes" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" HorizontalContentAlignment="Stretch" d:ItemsSource="{d:SampleData ItemCount=30}" ItemsSource="{Binding AllRecipes}" Background="{StaticResource ListBackground}" BorderThickness="0">
+            <ListView x:Name="lvRecipes" Grid.Row="3" Grid.Column="1" HorizontalContentAlignment="Stretch" d:ItemsSource="{d:SampleData ItemCount=30}" ItemsSource="{Binding AllRecipes}" Background="{StaticResource ListBackground}" BorderThickness="0">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Stretch" Height="25">
@@ -41,9 +41,9 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Label Grid.Column="0" Content="{Binding Name, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" Foreground="{StaticResource FontColour}"/>
-                            <Button Name="btnRead" Grid.Column="1" Content="Read" Style="{StaticResource RecipeButton}" Click="BtnReadRecipeClick"/>
-                            <Button Name="btnEdit" Grid.Column="3" Content="Edit" Style="{StaticResource RecipeButton}" Click="BtnEditRecipeClick"/>
-                            <Button Name="btnDelete" Grid.Column="5" Content="Delete" Style="{StaticResource RecipeButton}" Click="BtnDeleteRecipeClick"/>
+                            <Button Name="btnRead" ToolTip="Read this recipe" Grid.Column="1" Content="Read" Style="{StaticResource RecipeButton}" Click="BtnReadRecipeClick"/>
+                            <Button Name="btnEdit" ToolTip="Edit this recipe" Grid.Column="3" Content="Edit" Style="{StaticResource RecipeButton}" Click="BtnEditRecipeClick"/>
+                            <Button Name="btnDelete" ToolTip="Delete this recipe" Grid.Column="5" Content="Delete" Style="{StaticResource RecipeButton}" Click="BtnDeleteRecipeClick"/>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -58,8 +58,6 @@
                 <Button Name="btnSearch" Grid.Column="2" Content="Search" Style="{StaticResource RecipeButton}"/>
             </Grid>
         </Grid>
-
-
 
         <Grid Name="RecipeGrid" Grid.Column="1" Background="{StaticResource RecipeBackground}">
             <Grid.ColumnDefinitions>
@@ -118,7 +116,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBox Name="tbIngredienceName" Text="{Binding IName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource IngredienceNameTextbox}"/>
-                                <Button Name="btRemoveIngredience"  Grid.Column="2" Style="{StaticResource RemoveIngredienceButton}" Click="BtnRemoveIngredienceClick"/>
+                                <Button Name="btRemoveIngredience" ToolTip="Remove ingredience" Grid.Column="2" Style="{StaticResource RemoveIngredienceButton}" Click="BtnRemoveIngredienceClick"/>
                                 <TextBox Name="tbIngredienceAmount" Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="4" Style="{StaticResource IngredienceAmountTextbox}"/>
                             </Grid>
                         </DataTemplate>
@@ -130,7 +128,7 @@
                         <ColumnDefinition Width="25"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button Name="btnAddIngredience" Grid.Column="1" Style="{StaticResource AddIngredienceButton}" FontWeight="Bold" FontSize="17" Click="BtnAddIngredinceClick"/>
+                    <Button ToolTip="Add ingredience" Name="btnAddIngredience" Grid.Column="1" Style="{StaticResource AddIngredienceButton}" FontWeight="Bold" FontSize="17" Click="BtnAddIngredinceClick"/>
                 </Grid>
             </Grid>
             <TextBox Name="tbInstructions" TextWrapping="Wrap" AcceptsReturn="True" Grid.Column="1" Grid.Row="3" Style="{StaticResource InstructionsTextbox}" Text="{Binding Instructions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -149,12 +147,12 @@
                     <ColumnDefinition Width="0.2*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="New recipe" Style="{StaticResource ButtomButton}" Click="BtnNewRecipeClick"/>
-                <Button Grid.Column="2" Content="Import" Style="{StaticResource ButtomButton}" Click="BtnImportClick"/>
-                <Button Grid.Column="4" Content="Export" Style="{StaticResource ButtomButton}" Click="BtnExportClick"/>
-                <Button Grid.Column="6" Content="Random" Style="{StaticResource ButtomButton}" Click="BtnRandomClick"/>
-                <Button Grid.Column="8" Content="Undo" Style="{StaticResource ButtomButton}" Click="BtnUndoClick"/>
-                <Button Grid.Column="10" Content="Save" Style="{StaticResource ButtomButton}" Click="BtnSaveClick"/>
+                <Button Grid.Column="0" Content="New recipe" ToolTip="Create new recipe" Style="{StaticResource ButtomButton}" Click="BtnNewRecipeClick"/>
+                <Button Grid.Column="2" Content="Import" ToolTip="Import a recipe" Style="{StaticResource ButtomButton}" Click="BtnImportClick"/>
+                <Button Grid.Column="4" Content="Export" ToolTip="Export a recipe" Style="{StaticResource ButtomButton}" Click="BtnExportClick"/>
+                <Button Grid.Column="6" Content="Random" ToolTip="Select random recipe" Style="{StaticResource ButtomButton}" Click="BtnRandomClick"/>
+                <Button Grid.Column="8" Content="Undo" ToolTip="Close current recipe" Style="{StaticResource ButtomButton}" Click="BtnUndoClick"/>
+                <Button Grid.Column="10" Content="Save" ToolTip="Save current recipe" Style="{StaticResource ButtomButton}" Click="BtnSaveClick"/>
             </Grid>
         </Grid>
     </Grid>

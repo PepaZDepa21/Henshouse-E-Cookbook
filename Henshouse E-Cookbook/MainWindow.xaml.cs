@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Text.RegularExpressions;
 
 namespace Henshouse_E_Cookbook
 {
@@ -26,23 +27,17 @@ namespace Henshouse_E_Cookbook
         public MainWindow()
         {
             InitializeComponent();
+            ReadRecipesFromFile();
             rec = new Recipe();
             DataContext = rec;
-            lbInstructions.Visibility = Visibility.Hidden;
-            lbRecipeName.Visibility = Visibility.Hidden;
-            tbInstructions.Visibility = Visibility.Hidden;
-            tbRecipeName.Visibility = Visibility.Hidden;
-            lvIngrediencesEdit.Visibility = Visibility.Hidden;
-            lvIngrediencesRead.Visibility = Visibility.Hidden;
-            btnAddIngredience.Visibility = Visibility.Hidden;
+            HideRecipeEditRead();
         }
 
         private void BtnNewRecipeClick(object sender, RoutedEventArgs e)
         {
-            tbRecipeName.Visibility = Visibility.Visible;
-            lvIngrediencesEdit.Visibility = Visibility.Visible;
-            btnAddIngredience.Visibility = Visibility.Visible;
-            tbInstructions.Visibility = Visibility.Visible;
+            HideRecipeEditRead();
+            rec.ClearRecipe();
+            ShowEditRecipe();
         }
         private void BtnImportClick(object sender, RoutedEventArgs e)
         {
@@ -54,21 +49,74 @@ namespace Henshouse_E_Cookbook
             if (ofd.ShowDialog() == true)
             {
                 path = ofd.FileName;
-                MessageBox.Show(File.ReadAllText(path));
+                try
+                {
+                    string jsonRecipe = File.ReadAllText(path);
+                    Recipe.AllRecipes.Add(Recipe.DeserializeRecipe(jsonRecipe));
+                    MessageBox.Show("Successfully imported recipe");
+                    UpdateRecipeListview();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show($"Failed to import recipe from {path}");
+                }
             }
         }
         private void BtnExportClick(object sender, RoutedEventArgs e)
         {
-            
+            if (rec.IsEmpty())
+            {
+                var fd = new OpenFileDialog();
+                fd.ValidateNames = false;
+                fd.CheckFileExists = false;
+                fd.CheckPathExists = true;
+                fd.FileName = "Select a folder";
+                fd.Filter = "Folders|Folder";
+                string selectedFolder;
+
+                if (fd.ShowDialog() == true)
+                {
+                    selectedFolder = System.IO.Path.GetDirectoryName(fd.FileName);
+                    MessageBox.Show(selectedFolder);
+                    string path = $"{selectedFolder}\\{rec.Name}.txt";
+                    try
+                    {
+                        using (StreamWriter sw = new StreamWriter(path))
+                        {
+                            sw.WriteLine(Recipe.SerializeRecipe(rec));
+                            sw.Flush();
+                        }
+                        MessageBox.Show($"Successfully exported to {selectedFolder}");
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show($"Failed to export to {selectedFolder}");
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("First open recipe you want to export!");
+            }
         }
         private void BtnRandomClick(object sender, RoutedEventArgs e)
         {
+            HideRecipeEditRead();
             Random r = new Random();
-            rec = Recipe.AllRecipes[r.Next(Recipe.AllRecipes.Count - 1)];
+            Recipe recipe = Recipe.AllRecipes[r.Next(Recipe.AllRecipes.Count)];
+            rec.Name = recipe.Name;
+            rec.IngrediencesStr = recipe.IngrediencesStr;
+            rec.Instructions = recipe.Instructions;
+            rec.ID = recipe.ID;
+            rec.Ingrediences = Recipe.StrIngredsToListIngreds(rec.IngrediencesStr);
+            UpdateIngredienceListview();
+            ShowReadRecipe();
         }
         private void BtnUndoClick(object sender, RoutedEventArgs e)
         {
             rec.ClearRecipe();
+            UpdateIngredienceListview();
+            HideRecipeEditRead();
         }
         private void BtnSaveClick(object sender, RoutedEventArgs e)
         {
@@ -87,6 +135,8 @@ namespace Henshouse_E_Cookbook
             rec.ClearRecipe();
             UpdateRecipeListview();
             UpdateIngredienceListview();
+            WriteRecipesToFile();
+            HideRecipeEditRead();
         }
         private void BtnAddIngredinceClick(object sender, RoutedEventArgs e)
         {
@@ -102,25 +152,57 @@ namespace Henshouse_E_Cookbook
 
         private void BtnReadRecipeClick(object sender, RoutedEventArgs e)
         {
+            HideRecipeEditRead();
             Recipe recipe = ((Button)sender).DataContext as Recipe;
             rec.Name = recipe.Name;
-            rec.Ingrediences = recipe.Ingrediences;
+            rec.IngrediencesStr = recipe.IngrediencesStr;
             rec.Instructions = recipe.Instructions;
             rec.ID = recipe.ID;
+            rec.Ingrediences = Recipe.StrIngredsToListIngreds(rec.IngrediencesStr);
+            UpdateIngredienceListview();
+            ShowReadRecipe();
         }
         private void BtnEditRecipeClick(object sender, RoutedEventArgs e)
         {
+            HideRecipeEditRead();
             Recipe recipe = ((Button)sender).DataContext as Recipe;
             rec.Name = recipe.Name;
-            rec.Ingrediences = recipe.Ingrediences;
+            rec.IngrediencesStr = recipe.IngrediencesStr;
             rec.Instructions = recipe.Instructions;
             rec.ID = recipe.ID;
+            rec.Ingrediences = Recipe.StrIngredsToListIngreds(rec.IngrediencesStr);
+            ShowEditRecipe();
+            UpdateIngredienceListview();
         }
         private void BtnDeleteRecipeClick(object sender, RoutedEventArgs e)
         {
             Recipe recipe = ((Button)sender).DataContext as Recipe;
             Recipe.AllRecipes.Remove(recipe);
-            UpdateIngredienceListview();
+            UpdateRecipeListview();
+        }
+
+        public void HideRecipeEditRead()
+        {
+            lbInstructions.Visibility = Visibility.Hidden;
+            lbRecipeName.Visibility = Visibility.Hidden;
+            tbInstructions.Visibility = Visibility.Hidden;
+            tbRecipeName.Visibility = Visibility.Hidden;
+            lvIngrediencesEdit.Visibility = Visibility.Hidden;
+            lvIngrediencesRead.Visibility = Visibility.Hidden;
+            btnAddIngredience.Visibility = Visibility.Hidden;
+        }
+        public void ShowEditRecipe()
+        {
+            tbInstructions.Visibility = Visibility.Visible;
+            tbRecipeName.Visibility = Visibility.Visible;
+            lvIngrediencesEdit.Visibility = Visibility.Visible;
+            btnAddIngredience.Visibility = Visibility.Visible;
+        }
+        public void ShowReadRecipe()
+        {
+            lbInstructions.Visibility = Visibility.Visible;
+            lbRecipeName.Visibility = Visibility.Visible;
+            lvIngrediencesRead.Visibility = Visibility.Visible;
         }
 
         public void UpdateRecipeListview()
@@ -136,6 +218,29 @@ namespace Henshouse_E_Cookbook
             lvIngrediencesRead.ItemsSource = null;
             lvIngrediencesRead.ItemsSource = rec.Ingrediences;
         }
+        public static void WriteRecipesToFile()
+        {
+            using (StreamWriter sw = new StreamWriter(@".\Recipes.txt"))
+            {
+                foreach (var item in Recipe.AllRecipes)
+                {
+                    sw.WriteLine(Recipe.SerializeRecipe(item));
+                }
+            }
+        }
+        public void ReadRecipesFromFile()
+        {
+            string[] recipes = File.ReadAllLines(@".\Recipes.txt");
+            foreach (var item in recipes)
+            {
+                Recipe.AllRecipes.Add(Recipe.DeserializeRecipe(item));
+            }
+            UpdateRecipeListview();
+        }
+        public void StaticCopyRecipe()
+        {
+
+        }
     }
 
     class Recipe : INotifyPropertyChanged
@@ -149,17 +254,17 @@ namespace Henshouse_E_Cookbook
             {
                 return ingrediencesStr;
             }
-            set 
+            set
             {
                 ingrediencesStr = value;
             }
         }
-        
+
         [JsonIgnore]
         public static List<Recipe> AllRecipes { get; set; } = new List<Recipe>();
         [JsonIgnore]
-        public List<Ingredience> Ingrediences 
-        { 
+        public List<Ingredience> Ingrediences
+        {
             get
             {
                 return ingrediences;
@@ -181,7 +286,6 @@ namespace Henshouse_E_Cookbook
             {
                 name = value;
                 OnPropertyChanged("Name");
-                OnPropertyChanged("Ingrediences");
             }
         }
 
@@ -195,13 +299,12 @@ namespace Henshouse_E_Cookbook
             {
                 instructions = value;
                 OnPropertyChanged("Instructions");
-                OnPropertyChanged("Ingrediences");
             }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public Recipe() 
+        public Recipe()
         {
             ID = Guid.NewGuid();
             Ingrediences = new List<Ingredience>();
@@ -213,26 +316,48 @@ namespace Henshouse_E_Cookbook
             ID = iD;
             Ingrediences = ingrediences;
             StringBuilder sb = new StringBuilder();
-            foreach (var item in ingrediences)
+            for (int i = 0; i < ingrediences.Count; i++)
             {
-                sb.AppendLine(Ingredience.SerializeIngredience(item));
+                if (i == ingrediences.Count - 1)
+                {
+                    sb.Append(Ingredience.SerializeIngredience(ingrediences[i]));
+                }
+                else
+                {
+                    sb.Append($"{Ingredience.SerializeIngredience(ingrediences[i])} ");
+                }
             }
             IngrediencesStr = sb.ToString();
         }
-        public static Recipe CopyRecipe(Recipe recipe) 
-        { 
-            
-            return new Recipe(recipe.Name, recipe.Instructions, recipe.ID, recipe.Ingrediences); 
+        public static Recipe CopyRecipe(Recipe recipe)
+        {
+            return new Recipe(recipe.Name, recipe.Instructions, recipe.ID, recipe.Ingrediences);
         }
-        
+
+        public bool IsOK()
+        {
+            bool nameOK = Name != string.Empty;
+            bool instructionsOK = Instructions != string.Empty;
+            bool ingrediencesOK = false;
+            foreach (var item in Ingrediences)
+            {
+                ingrediencesOK = item.IName != string.Empty && item.RegexAmount.IsMatch(item.Amount);
+                if (!ingrediencesOK)
+                {
+                    break;
+                }
+            }
+            return nameOK && instructionsOK && ingrediencesOK;
+        }
+
 
         public void ClearRecipe()
         {
-            Name = null;
-            Instructions = null;
+            Name = string.Empty;
+            Instructions = string.Empty;
             ID = Guid.NewGuid();
             Ingrediences = new List<Ingredience>();
-            IngrediencesStr = null;
+            IngrediencesStr = string.Empty;
         }
 
         private void OnPropertyChanged(string property)
@@ -241,6 +366,28 @@ namespace Henshouse_E_Cookbook
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
             }
+        }
+        public static List<Ingredience> StrIngredsToListIngreds(string str)
+        {
+            string[] ingreds = str.Split(' ');
+            List<Ingredience> returnList = new List<Ingredience>();
+            foreach (var item in ingreds)
+            {
+                returnList.Add(Ingredience.DeserializeIngredience(item));
+            }
+            return returnList;
+        }
+        public static string SerializeRecipe(Recipe recipe)
+        {
+            return JsonSerializer.Serialize(recipe);
+        }
+        public static Recipe DeserializeRecipe(string recipe) 
+        {
+            return JsonSerializer.Deserialize<Recipe>(recipe);
+        }
+        public bool IsEmpty() 
+        {
+            return Name != string.Empty && Name != null && instructions != string.Empty && instructions != null && ingrediencesStr != string.Empty & ingrediencesStr != null;
         }
     }
 
@@ -260,6 +407,7 @@ namespace Henshouse_E_Cookbook
                 iName = value;
             }
         }
+        public Regex RegexAmount = new Regex("^(\\d{1,4})( )?([a-zA-Z]{1,3})$");
         private string amount;
         public string Amount
         {
@@ -279,6 +427,16 @@ namespace Henshouse_E_Cookbook
         public static Ingredience DeserializeIngredience(string ingredience)
         {
             return JsonSerializer.Deserialize<Ingredience>(ingredience);
+        }
+        public static List<Ingredience> DeserializeInstructsStr(string ingrediences)
+        {
+            string[] ings = ingrediences.Split(' ');
+            List<Ingredience> retIngs = new List<Ingredience>();
+            foreach (var item in ings)
+            {
+                retIngs.Add(Ingredience.DeserializeIngredience(item)); 
+            }
+            return retIngs;
         }
         public Ingredience()
         {

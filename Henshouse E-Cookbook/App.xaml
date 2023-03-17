@@ -13,43 +13,79 @@
                 <Setter Property="Background" Value="#C4B7CB" />
                 <Setter Property="Foreground" Value="{StaticResource FontColour}" />
                 <Setter Property="BorderThickness" Value="0"/>
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="#C4B7CB"/>
-                    </Trigger>
-                </Style.Triggers>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Name="border" BorderThickness="0" Background="#C4B7CB">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#C4B7CB"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
             <Style x:Key="ButtomButton" TargetType="Button">
                 <Setter Property="Background" Value="#C98BB9" />
                 <Setter Property="Foreground" Value="{StaticResource FontColour}" />
                 <Setter Property="BorderThickness" Value="0"/>
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="#C98BB9"/>
-                    </Trigger>
-                </Style.Triggers>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Name="border" BorderThickness="0" Background="#C98BB9">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#C98BB9"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
             <Style x:Key="AddIngredienceButton" TargetType="Button">
                 <Setter Property="Background" Value="#C98BB9" />
                 <Setter Property="Foreground" Value="#32CD32" />
                 <Setter Property="Content" Value="+"/>
                 <Setter Property="BorderThickness" Value="0"/>
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="#C98BB9"/>
-                    </Trigger>
-                </Style.Triggers>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Name="border" BorderThickness="0" Background="#C98BB9">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#C98BB9"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
             <Style x:Key="RemoveIngredienceButton" TargetType="Button">
                 <Setter Property="Background" Value="#C98BB9" />
                 <Setter Property="Foreground" Value="#8B0000" />
                 <Setter Property="Content" Value="-"/>
                 <Setter Property="BorderThickness" Value="0"/>
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="#C98BB9"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Name="border" BorderThickness="0" Background="#C98BB9">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#C98BB9"/>
                     </Trigger>
-                </Style.Triggers>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
             <Style x:Key="SearchTextbox" TargetType="TextBox">
                 <Setter Property="Background" Value="#EE92C2"/>
@@ -84,11 +120,12 @@
                 <Setter Property="HorizontalContentAlignment" Value="Left"/>
                 <Setter Property="VerticalContentAlignment" Value="Top"/>
                 <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
             </Style>
             <Style x:Key="RecipeNameLabel" TargetType="Label">
                 <Setter Property="Background" Value="{StaticResource RecipeBackground}" />
                 <Setter Property="Foreground" Value="{StaticResource FontColour}" />
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
             </Style>
             <Style x:Key="IngredienceNameLabel" TargetType="Label">
                 <Setter Property="Background" Value="{StaticResource RecipeBackground}" />

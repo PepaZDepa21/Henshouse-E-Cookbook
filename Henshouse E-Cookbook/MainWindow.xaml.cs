@@ -179,6 +179,37 @@ namespace Henshouse_E_Cookbook
             Recipe recipe = ((Button)sender).DataContext as Recipe;
             Recipe.AllRecipes.Remove(recipe);
             UpdateRecipeListview();
+            WriteRecipesToFile();
+        }
+
+        private void BtnSearchClick(object sender, RoutedEventArgs e)
+        {
+            Search();
+        }
+
+        public void Search()
+        {
+            if (tbSearch.Text == string.Empty || tbSearch.Text == null)
+            {
+                Recipe.AllRecipes = new List<Recipe>();
+                ReadRecipesFromFile();
+            }
+            else
+            {
+                List<Recipe> temp = Recipe.AllRecipes;
+                Recipe.AllRecipes = new List<Recipe>();
+                foreach (var item in temp)
+                {
+                    foreach (var i in item.Ingrediences)
+                    {
+                        if (i.IName.Contains(tbSearch.Text))
+                        {
+                            Recipe.AllRecipes.Add(item);
+                        }
+                    }
+                }
+            }
+            UpdateRecipeListview();
         }
 
         public void HideRecipeEditRead()
@@ -230,16 +261,16 @@ namespace Henshouse_E_Cookbook
         }
         public void ReadRecipesFromFile()
         {
-            string[] recipes = File.ReadAllLines(@".\Recipes.txt");
-            foreach (var item in recipes)
+            try
             {
-                Recipe.AllRecipes.Add(Recipe.DeserializeRecipe(item));
+                string[] recipes = File.ReadAllLines(@".\Recipes.txt");
+                foreach (var item in recipes)
+                {
+                    Recipe.AllRecipes.Add(Recipe.DeserializeRecipe(item));
+                }
+                UpdateRecipeListview();
             }
-            UpdateRecipeListview();
-        }
-        public void StaticCopyRecipe()
-        {
-
+            catch (Exception) { }
         }
     }
 

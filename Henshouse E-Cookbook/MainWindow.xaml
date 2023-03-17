@@ -54,8 +54,8 @@
                     <ColumnDefinition Width="10"/>
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Style="{StaticResource SearchTextbox}"/>
-                <Button Name="btnSearch" Grid.Column="2" Content="Search" Style="{StaticResource RecipeButton}"/>
+                <TextBox Name="tbSearch" Style="{StaticResource SearchTextbox}"/>
+                <Button Name="btnSearch" Grid.Column="2" Content="Search" Style="{StaticResource RecipeButton}" Click="BtnSearchClick"/>
             </Grid>
         </Grid>
 

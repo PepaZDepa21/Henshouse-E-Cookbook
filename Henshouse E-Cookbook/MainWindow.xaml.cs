@@ -478,7 +478,7 @@ namespace Henshouse_E_Cookbook
                 iName = value;
             }
         }
-        public Regex RegexAmount = new Regex("^(\\d{1,4})( )?([a-zA-Z]{1,3})$");
+        public Regex RegexAmount = new Regex("^(\\d{1,4})( )?([a-zA-Z]{1,4})$");
         private string amount;
         public string Amount
         {

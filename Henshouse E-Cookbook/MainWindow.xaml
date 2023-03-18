@@ -29,6 +29,19 @@
             </Grid.RowDefinitions>
             <Label Grid.Row="1" Grid.Column="1" FontWeight="Bold" Content="Recipes" HorizontalContentAlignment="Center" Foreground="{StaticResource FontColour}" FontSize="12"/>
             <ListView x:Name="lvRecipes" Grid.Row="3" Grid.Column="1" HorizontalContentAlignment="Stretch" d:ItemsSource="{d:SampleData ItemCount=30}" ItemsSource="{Binding RecipesToShow}" Background="{StaticResource ListBackground}" BorderThickness="0">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Style.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"/>
+                        </Style.Resources>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Stretch" Height="25">
@@ -88,6 +101,12 @@
                 <TextBox Name="tbRecipeName" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource RecipeNameTextbox}"/>
                 <Label Name="lbRecipeName" Content="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource RecipeNameLabel}"/>
                 <ListView x:Name="lvIngrediencesRead" Grid.Row="2" HorizontalContentAlignment="Stretch" d:ItemsSource="{d:SampleData ItemCount=30}" Background="{StaticResource RecipeBackground}" ItemsSource="{Binding Ingrediences, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" BorderThickness="0">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Focusable" Value="False" />
+                            <Setter Property="IsEnabled" Value="False" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid HorizontalAlignment="Stretch" Height="25">
@@ -105,6 +124,12 @@
                     </ListView.ItemTemplate>
                 </ListView>
                 <ListView x:Name="lvIngrediencesEdit" Grid.Row="2" HorizontalContentAlignment="Stretch" d:ItemsSource="{d:SampleData ItemCount=30}" Background="{StaticResource RecipeBackground}" ItemsSource="{Binding Ingrediences, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" BorderThickness="0">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Focusable" Value="False" />
+                            <Setter Property="IsEnabled" Value="False" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid HorizontalAlignment="Stretch" Height="25">

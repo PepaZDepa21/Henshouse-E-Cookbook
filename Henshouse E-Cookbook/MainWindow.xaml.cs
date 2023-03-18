@@ -125,20 +125,27 @@ namespace Henshouse_E_Cookbook
             Recipe temp = Recipe.AllRecipes.Find(r => r.ID == rec.ID);
             int ind = Recipe.AllRecipes.IndexOf(temp);
 
-            if (temp != null)
+            if (rec.IsOK())
             {
-                Recipe.AllRecipes[ind] = Recipe.CopyRecipe(rec);
+                if (temp != null)
+                {
+                    Recipe.AllRecipes[ind] = Recipe.CopyRecipe(rec);
+                }
+                else
+                {
+                    Recipe.AllRecipes.Add(Recipe.CopyRecipe(rec));
+                }
+                Recipe.UpdateToMatchFilter(rec);
+                rec.ClearRecipe();
+                UpdateRecipeListview();
+                UpdateIngredienceListview();
+                WriteRecipesToFile();
+                HideRecipeEditRead();
             }
             else
             {
-                Recipe.AllRecipes.Add(Recipe.CopyRecipe(rec));
+                MessageBox.Show("Some values are inappropriate!");
             }
-            Recipe.UpdateToMatchFilter(rec);
-            rec.ClearRecipe();
-            UpdateRecipeListview();
-            UpdateIngredienceListview();
-            WriteRecipesToFile();
-            HideRecipeEditRead();
         }
         private void BtnAddIngredinceClick(object sender, RoutedEventArgs e)
         {
@@ -179,10 +186,16 @@ namespace Henshouse_E_Cookbook
         private void BtnDeleteRecipeClick(object sender, RoutedEventArgs e)
         {
             Recipe recipe = ((Button)sender).DataContext as Recipe;
-            Recipe.AllRecipes.Remove(recipe);
-            Recipe.UpdateToMatchFilter(rec);
-            UpdateRecipeListview();
-            WriteRecipesToFile();
+            MessageBoxResult del = MessageBox.Show($"Are you sure you want to delete {recipe.Name}?", $"Delete {recipe.Name}", MessageBoxButton.YesNo);
+            if (del == MessageBoxResult.Yes)
+            {
+                Recipe.AllRecipes.Remove(recipe);
+                Recipe.UpdateToMatchFilter(rec);
+                UpdateRecipeListview();
+                WriteRecipesToFile();
+                HideRecipeEditRead();
+                MessageBox.Show($"{recipe.Name} deleted!");
+            }
         }
 
         private void BtnSearchClick(object sender, RoutedEventArgs e)
@@ -453,7 +466,7 @@ namespace Henshouse_E_Cookbook
             {
                 foreach (var item in AllRecipes)
                 {
-                    if (item.Name.Contains(recipe.Search))
+                    if (item.Name.Contains(recipe.Search.ToLower()))
                     {
                         RecipesToShow.Add(item);
                     }
@@ -478,7 +491,7 @@ namespace Henshouse_E_Cookbook
                 iName = value;
             }
         }
-        public Regex RegexAmount = new Regex("^(\\d{1,4})( )?([a-zA-Z]{1,4})$");
+        public Regex RegexAmount = new Regex("^(\\d{1,4})([a-zA-Z]{1,4})$");
         private string amount;
         public string Amount
         {
@@ -491,13 +504,34 @@ namespace Henshouse_E_Cookbook
                 amount = value;
             }
         }
+        public Ingredience()
+        {
+            ID = Guid.NewGuid();
+            IName = string.Empty;
+            Amount = string.Empty;
+        }
         public static string SerializeIngredience(Ingredience ingredience)
         {
-            return JsonSerializer.Serialize(ingredience);
+            try
+            {
+                return JsonSerializer.Serialize(ingredience);
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+            
         }
         public static Ingredience DeserializeIngredience(string ingredience)
         {
-            return JsonSerializer.Deserialize<Ingredience>(ingredience);
+            try
+            {
+                return JsonSerializer.Deserialize<Ingredience>(ingredience);
+            }
+            catch (Exception)
+            {
+                return new Ingredience();
+            }
         }
         public static List<Ingredience> DeserializeInstructsStr(string ingrediences)
         {
@@ -505,14 +539,9 @@ namespace Henshouse_E_Cookbook
             List<Ingredience> retIngs = new List<Ingredience>();
             foreach (var item in ings)
             {
-                retIngs.Add(Ingredience.DeserializeIngredience(item)); 
+                retIngs.Add(DeserializeIngredience(item)); 
             }
             return retIngs;
-        }
-        public Ingredience()
-        {
-            IName = string.Empty;
-            amount = string.Empty;
         }
     }
 }

@@ -6,6 +6,11 @@
     <RootNamespace>Henshouse_E_Cookbook</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>HECIcon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="HECIcon.ico" />
+  </ItemGroup>
 
 </Project>

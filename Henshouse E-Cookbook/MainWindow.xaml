@@ -28,7 +28,7 @@
                 <RowDefinition Height="20"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="1" Grid.Column="1" FontWeight="Bold" Content="Recipes" HorizontalContentAlignment="Center" Foreground="{StaticResource FontColour}" FontSize="12"/>
-            <ListView x:Name="lvRecipes" Grid.Row="3" Grid.Column="1" HorizontalContentAlignment="Stretch" d:ItemsSource="{d:SampleData ItemCount=30}" ItemsSource="{Binding AllRecipes}" Background="{StaticResource ListBackground}" BorderThickness="0">
+            <ListView x:Name="lvRecipes" Grid.Row="3" Grid.Column="1" HorizontalContentAlignment="Stretch" d:ItemsSource="{d:SampleData ItemCount=30}" ItemsSource="{Binding RecipesToShow}" Background="{StaticResource ListBackground}" BorderThickness="0">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Stretch" Height="25">
@@ -54,7 +54,7 @@
                     <ColumnDefinition Width="10"/>
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Name="tbSearch" Style="{StaticResource SearchTextbox}"/>
+                <TextBox Name="tbSearch" Style="{StaticResource SearchTextbox}" Text="{Binding Search}"/>
                 <Button Name="btnSearch" Grid.Column="2" Content="Search" Style="{StaticResource RecipeButton}" Click="BtnSearchClick"/>
             </Grid>
         </Grid>

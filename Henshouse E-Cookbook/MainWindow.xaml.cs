@@ -27,9 +27,10 @@ namespace Henshouse_E_Cookbook
         public MainWindow()
         {
             InitializeComponent();
-            ReadRecipesFromFile();
             rec = new Recipe();
             DataContext = rec;
+            ReadRecipesFromFile();
+            Recipe.UpdateToMatchFilter(rec);
             HideRecipeEditRead();
         }
 
@@ -53,6 +54,7 @@ namespace Henshouse_E_Cookbook
                 {
                     string jsonRecipe = File.ReadAllText(path);
                     Recipe.AllRecipes.Add(Recipe.DeserializeRecipe(jsonRecipe));
+                    Recipe.UpdateToMatchFilter(rec);
                     MessageBox.Show("Successfully imported recipe");
                     UpdateRecipeListview();
                 }
@@ -103,7 +105,7 @@ namespace Henshouse_E_Cookbook
         {
             HideRecipeEditRead();
             Random r = new Random();
-            Recipe recipe = Recipe.AllRecipes[r.Next(Recipe.AllRecipes.Count)];
+            Recipe recipe = Recipe.RecipesToShow[r.Next(Recipe.RecipesToShow.Count)];
             rec.Name = recipe.Name;
             rec.IngrediencesStr = recipe.IngrediencesStr;
             rec.Instructions = recipe.Instructions;
@@ -131,7 +133,7 @@ namespace Henshouse_E_Cookbook
             {
                 Recipe.AllRecipes.Add(Recipe.CopyRecipe(rec));
             }
-
+            Recipe.UpdateToMatchFilter(rec);
             rec.ClearRecipe();
             UpdateRecipeListview();
             UpdateIngredienceListview();
@@ -178,13 +180,15 @@ namespace Henshouse_E_Cookbook
         {
             Recipe recipe = ((Button)sender).DataContext as Recipe;
             Recipe.AllRecipes.Remove(recipe);
+            Recipe.UpdateToMatchFilter(rec);
             UpdateRecipeListview();
             WriteRecipesToFile();
         }
 
         private void BtnSearchClick(object sender, RoutedEventArgs e)
         {
-            Search();
+            Recipe.UpdateToMatchFilter(rec);
+            UpdateRecipeListview();
         }
 
         public void Search()
@@ -239,7 +243,7 @@ namespace Henshouse_E_Cookbook
         public void UpdateRecipeListview()
         {
             lvRecipes.ItemsSource = null;
-            lvRecipes.ItemsSource = Recipe.AllRecipes;
+            lvRecipes.ItemsSource = Recipe.RecipesToShow;
         }
 
         public void UpdateIngredienceListview()
@@ -276,7 +280,7 @@ namespace Henshouse_E_Cookbook
 
     class Recipe : INotifyPropertyChanged
     {
-        private string? name, instructions, ingrediencesStr;
+        private string? name, instructions, ingrediencesStr, search;
         public Guid ID { get; set; }
         private List<Ingredience> ingrediences { get; set; }
         public string IngrediencesStr
@@ -290,9 +294,24 @@ namespace Henshouse_E_Cookbook
                 ingrediencesStr = value;
             }
         }
+        public string Search
+        {
+            get
+            {
+                return search;
+            }
+            set 
+            { 
+                search = value;
+                OnPropertyChanged("Search");
+            }
+        }
 
         [JsonIgnore]
         public static List<Recipe> AllRecipes { get; set; } = new List<Recipe>();
+
+        [JsonIgnore]
+        public static List<Recipe> RecipesToShow { get; set; } = new List<Recipe>();
         [JsonIgnore]
         public List<Ingredience> Ingrediences
         {
@@ -419,6 +438,27 @@ namespace Henshouse_E_Cookbook
         public bool IsEmpty() 
         {
             return Name != string.Empty && Name != null && instructions != string.Empty && instructions != null && ingrediencesStr != string.Empty & ingrediencesStr != null;
+        }
+        public static void UpdateToMatchFilter(Recipe recipe)
+        {
+            RecipesToShow.Clear();
+            if (recipe.Search == null || recipe.Search == string.Empty)
+            {
+                foreach (var item in AllRecipes)
+                {
+                    RecipesToShow.Add(item);
+                }
+            }
+            else
+            {
+                foreach (var item in AllRecipes)
+                {
+                    if (item.Name.Contains(recipe.Search))
+                    {
+                        RecipesToShow.Add(item);
+                    }
+                }
+            }
         }
     }
 

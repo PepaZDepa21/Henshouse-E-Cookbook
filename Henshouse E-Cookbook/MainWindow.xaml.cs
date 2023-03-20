@@ -27,6 +27,7 @@ namespace Henshouse_E_Cookbook
         public MainWindow()
         {
             InitializeComponent();
+            CreateRecipeFile();
             rec = new Recipe();
             DataContext = rec;
             ReadRecipesFromFile();
@@ -288,6 +289,14 @@ namespace Henshouse_E_Cookbook
                 UpdateRecipeListview();
             }
             catch (Exception) { }
+        }
+
+        public void CreateRecipeFile()
+        {
+            if (!File.Exists(@".\Recipes.txt"))
+            {
+                File.Create(@".\Recipes.txt");
+            }
         }
     }
 
